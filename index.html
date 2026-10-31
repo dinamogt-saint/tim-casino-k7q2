@@ -1013,7 +1013,7 @@ function droneStep(now) {
 
   s.spawn -= dt;
   if (s.spawn <= 0) {
-    s.spawn = Math.max(.28, .85 - s.t * .02) * (.6 + Math.random() * .8);
+    s.spawn = Math.max(.28, .85 - s.t * .02) * (.6 + Math.random() * .8) * 1.18; // на ~15% меньше дронов
     s.drones.push({ x: 6 + Math.random() * (DW - 12), y: -6, vx: 0, vy: 34 + Math.random() * 22 + s.t * 1.5 });
   }
   s.canIn -= dt;
