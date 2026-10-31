@@ -683,16 +683,25 @@ const LOANS = [
   { lender: 'Займ под залог PlayStation', amount: 1000, back: 1400, fine: 'Приставку заберут, если что. Вернуть 1 400 €.' },
   { lender: 'Займ у мамы', amount: 2000, back: 2000, fine: 'Без процентов, но с долгим разговором на кухне.' }
 ];
-const FIGHTERS = [
-  { name: 'Гриша «Пельмень»', rec: '14-2-0 · тяж', odds: 1.65, trunks: '#d33c33', skin: '#e9b48e', hair: '#3a2416' },
-  { name: 'Валера «Коллектор»', rec: '9-4-1 · тяж', odds: 2.40, trunks: '#2f6fd6', skin: '#c48a60', hair: '#111111' }
+// пары бойцов по номеру боя: сначала политика, потом футбол, дальше случайные
+const CARDS = [
+  [{ name: 'Путин', rec: '«Киев за 3 дня» · тяж', odds: 1.90 }, { name: 'Зеля', rec: 'всё ещё стоит · тяж', odds: 1.90 }],
+  [{ name: 'Месси', rec: '8 Золотых мячей', odds: 1.75 }, { name: 'Роналду', rec: 'SIUUU · 900+ голов', odds: 2.05 }]
 ];
-let loans = 0, cash = 0, debt = 0, fights = 0, fightBusy = false;
-const eur = n => n.toLocaleString('ru-RU') + ' €';
-const fc = $('#fightCanvas'), fx = fc.getContext('2d');
-
-function fightInit() {
-  loans = 0; cash = 0; debt = 0; fights = 0; fightBusy = false;
+const FIRST = ['Гриша', 'Валера', 'Толик', 'Жора', 'Стас', 'Арсен', 'Эдик', 'Витёк'];
+const NICK = ['«Пельмень»', '«Коллектор»', '«Шаурма»', '«Самокат»', '«Бетон»', '«Микрозайм»', '«Бензобак»', '«Гойда»'];
+const LOOKS = [
+  { trunks: '#d33c33', skin: '#e9b48e', hair: '#3a2416' },
+  { trunks: '#2f6fd6', skin: '#c48a60', hair: '#111111' }
+];
+let FIGHTERS = [];
+function setCard(n) {
+  let pair = CARDS[n];
+  if (!pair) {
+    const f = shuffle([...FIRST]), k = shuffle([...NICK]);
+    pair = [0, 1].map(i => ({ name: `${f[i]} ${k[i]}`, rec: `${8 + rand(12)}-${rand(6)}-${rand(2)} · тяж`, odds: +(1.5 + Math.random()).toFixed(2) }));
+  }
+  FIGHTERS = pair.map((f, i) => ({ ...f, ...LOOKS[i] }));
   document.querySelectorAll('.fighter').forEach((b, i) => {
     const f = FIGHTERS[i];
     b.querySelector('.fname').textContent = f.name;
@@ -700,8 +709,15 @@ function fightInit() {
     b.querySelector('.odds').textContent = 'кэф ' + f.odds.toFixed(2);
     const c = b.querySelector('canvas'), x = c.getContext('2d');
     x.clearRect(0, 0, 32, 32);
-    drawFighter(x, f, 15, 38, 1, "idle", 0);
+    drawFighter(x, f, 15, 38, 1, 'idle', 0);
   });
+}
+let loans = 0, cash = 0, debt = 0, fights = 0, fightBusy = false;
+const eur = n => n.toLocaleString('ru-RU') + ' €';
+const fc = $('#fightCanvas'), fx = fc.getContext('2d');
+
+function fightInit() {
+  loans = 0; cash = 0; debt = 0; fights = 0; fightBusy = false;
   loanView();
 }
 function wallet() { $('#cash').textContent = eur(cash); $('#debt').textContent = eur(debt); }
@@ -721,6 +737,7 @@ $('#loanBtn').onclick = () => {
   loans++; cash += L.amount; debt += L.back;
   wallet();
   $('#fLoan').hidden = $('#loanBtn').hidden = true;
+  setCard(fights);
   $('#fPick').hidden = false;
   $('#fightMsg').textContent = 'Одобрено за 3 секунды. Теперь всё на одного.';
 };
@@ -795,7 +812,7 @@ const LINES = ['{a} пробивает джеб', '{a} заходит с пра�
 async function runFight(pick) {
   fightBusy = true;
   fights++;
-  const win = fights >= 2 || Math.random() < .45;   // со второго займа всегда заходит
+  const win = fights >= 3 || Math.random() < .45;   // с третьего боя всегда заходит
   const w = win ? pick : 1 - pick, l = 1 - w;
   const stake = cash;
   $('#fPick').hidden = true; $('#fFight').hidden = false;
