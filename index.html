@@ -50,7 +50,7 @@ p { margin: 0; }
 .muted { color: var(--muted); }
 
 /* progress rail */
-.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 .step { display: flex; flex-direction: column; gap: 6px; font: 600 10px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .step i { display: block; height: 4px; border-radius: 2px; background: #3a2630; }
 .step.on { color: var(--gold-soft); }
@@ -168,6 +168,38 @@ p { margin: 0; }
 .counter { font: 700 34px var(--mono); color: var(--cream); font-variant-numeric: tabular-nums; }
 @keyframes pop { from { transform: scale(.3); opacity: 0; } }
 
+/* fight night */
+.loan {
+  background: var(--paper); color: var(--ink);
+  border-radius: 14px; padding: 16px;
+  display: flex; flex-direction: column; gap: 6px;
+  border: 2px dashed #b9a68a;
+}
+.loan .lender { font: 800 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
+.loan .amount { font: 800 38px/1 var(--display); font-variant-numeric: tabular-nums; }
+.loan .fine { font-size: 12px; color: #6b5b4c; }
+.wallet { display: flex; justify-content: space-between; font: 700 13px var(--mono); color: var(--muted); }
+.wallet b { color: var(--gold-soft); font-variant-numeric: tabular-nums; }
+.wallet .debt b { color: #ff8b80; }
+.fighters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fighter {
+  appearance: none; cursor: pointer; text-align: left;
+  background: var(--ink); color: var(--cream);
+  border: 2px solid #4a3a2a; border-radius: 14px;
+  padding: 12px; display: flex; flex-direction: column; gap: 6px;
+  font: 600 13px/1.3 var(--body); min-width: 0;
+}
+.fighter:active { transform: translateY(2px); }
+.fighter:focus-visible { outline: 3px solid var(--cream); outline-offset: 2px; }
+.fighter canvas { width: 100%; aspect-ratio: 1 / 1; image-rendering: pixelated; background: #2a1b22; border-radius: 8px; }
+.fighter .fname { font: 800 14px/1.2 var(--display); }
+.fighter .rec { font: 600 11px var(--mono); color: var(--muted); }
+.fighter .odds { font: 800 16px var(--mono); color: var(--gold-soft); }
+.fighter .allin { font: 800 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; background: var(--gold); color: var(--ink); border-radius: 6px; padding: 6px; text-align: center; }
+.arena { border: 3px solid var(--gold); border-radius: 12px; overflow: hidden; background: #000; }
+.arena canvas { display: block; width: 100%; aspect-ratio: 160 / 100; image-rendering: pixelated; }
+.ticker { font: 700 13px var(--mono); color: var(--cream); min-height: 20px; text-align: center; }
+
 /* scratch */
 .scratch {
   position: relative; border-radius: 16px; overflow: hidden;
@@ -221,8 +253,9 @@ p { margin: 0; }
   <nav class="steps" id="steps" aria-label="Прогресс">
     <div class="step" data-s="1"><i></i>Блэкджек</div>
     <div class="step" data-s="2"><i></i>Слот</div>
-    <div class="step" data-s="3"><i></i>Скретч</div>
-    <div class="step" data-s="4"><i></i>Приз</div>
+    <div class="step" data-s="3"><i></i>Бои</div>
+    <div class="step" data-s="4"><i></i>Скретч</div>
+    <div class="step" data-s="5"><i></i>Приз</div>
   </nav>
 
   <!-- 0: intro -->
@@ -234,12 +267,13 @@ p { margin: 0; }
       <div class="table-head">
         <span class="eyebrow">Только сегодня · вход по имени</span>
         <h1>Тимур, казино открыто для тебя</h1>
-        <p class="muted">С днём рождения! Сегодня ты лудик. Три стола, у каждого своя игра. Пройди все три и забери приз в конце.</p>
+        <p class="muted">С днём рождения! Сегодня ты лудик. Четыре стола, у каждого своя игра. Пройди все четыре и забери приз в конце.</p>
       </div>
       <ol class="rules">
         <li><span class="n">1</span><span><b>Блэкджек.</b> Обыграй дилера в одной раздаче.</span></li>
         <li><span class="n">2</span><span><b>Слот.</b> Выбей бонуску: три звезды на линии.</span></li>
-        <li><span class="n">3</span><span><b>Скретч-карта.</b> Сотри покрытие и найди три одинаковых.</span></li>
+        <li><span class="n">3</span><span><b>Бои.</b> Возьми микрозайм и поставь всё на бойца.</span></li>
+        <li><span class="n">4</span><span><b>Скретч-карта.</b> Сотри покрытие и найди три одинаковых.</span></li>
       </ol>
       <button class="btn" id="startBtn">Войти в казино</button>
     </div>
@@ -249,7 +283,7 @@ p { margin: 0; }
   <section class="screen" data-stage="1" hidden>
     <div class="table">
       <div class="table-head">
-        <span class="eyebrow">Стол 1 из 3</span>
+        <span class="eyebrow">Стол 1 из 4</span>
         <h2>Блэкджек</h2>
         <p class="muted">Набери больше дилера, но не больше 21. Дилер берёт до 17.</p>
       </div>
@@ -275,7 +309,7 @@ p { margin: 0; }
   <section class="screen" data-stage="2" hidden>
     <div class="table">
       <div class="table-head">
-        <span class="eyebrow">Стол 2 из 3</span>
+        <span class="eyebrow">Стол 2 из 4</span>
         <h2>Слот «Именинник»</h2>
         <p class="muted">Нужна бонуска: три ⭐ на красной линии. Крути, пока не зайдёт.</p>
       </div>
@@ -294,11 +328,44 @@ p { margin: 0; }
     </div>
   </section>
 
-  <!-- 3: scratch -->
+  <!-- 3: fight night -->
   <section class="screen" data-stage="3" hidden>
     <div class="table">
       <div class="table-head">
-        <span class="eyebrow">Стол 3 из 3</span>
+        <span class="eyebrow">Стол 3 из 4</span>
+        <h2>Pixel Fight Night</h2>
+        <p class="muted">Денег нет? Не беда. Бери микрозайм и ставь всё на одного бойца. Победит — идёшь дальше.</p>
+      </div>
+      <div class="wallet"><span>На счету: <b id="cash">0 €</b></span><span class="debt">Долг: <b id="debt">0 €</b></span></div>
+
+      <div id="fLoan" class="loan">
+        <span class="lender" id="lender"></span>
+        <span class="amount" id="loanAmount"></span>
+        <span class="fine" id="loanFine"></span>
+      </div>
+      <button class="btn" id="loanBtn"></button>
+
+      <div id="fPick" hidden>
+        <div class="fighters">
+          <button class="fighter" data-f="0"><canvas width="32" height="32"></canvas><span class="fname"></span><span class="rec"></span><span class="odds"></span><span class="allin">Всё на него</span></button>
+          <button class="fighter" data-f="1"><canvas width="32" height="32"></canvas><span class="fname"></span><span class="rec"></span><span class="odds"></span><span class="allin">Всё на него</span></button>
+        </div>
+      </div>
+
+      <div id="fFight" hidden>
+        <div class="arena"><canvas id="fightCanvas" width="160" height="100"></canvas></div>
+      </div>
+      <div class="ticker" id="ticker" aria-live="polite"></div>
+      <div class="msg" id="fightMsg" aria-live="polite"></div>
+      <button class="btn" id="fightNext" hidden></button>
+    </div>
+  </section>
+
+  <!-- 4: scratch -->
+  <section class="screen" data-stage="4" hidden>
+    <div class="table">
+      <div class="table-head">
+        <span class="eyebrow">Стол 4 из 4</span>
         <h2>Скретч-карта</h2>
         <p class="muted">Сотри покрытие пальцем. Три одинаковых символа забирают главный приз.</p>
       </div>
@@ -311,8 +378,8 @@ p { margin: 0; }
     </div>
   </section>
 
-  <!-- 4: prize -->
-  <section class="screen" data-stage="4" hidden>
+  <!-- 5: prize -->
+  <section class="screen" data-stage="5" hidden>
     <div style="display:flex;flex-direction:column;gap:18px">
       <div class="prize-head">
         <span class="eyebrow">Джекпот</span>
@@ -353,8 +420,8 @@ p { margin: 0; }
     <span class="eyebrow">⭐ ⭐ ⭐</span>
     <div class="big-word">БОНУСКА</div>
     <div class="counter" id="bonusCount">0</div>
-    <p class="muted">Заносы как у стримера. Последний стол ждёт.</p>
-    <button class="btn" id="bonusNext">К последнему столу</button>
+    <p class="muted">Заносы как у стримера. Только деньги эти фантики, а дальше бои.</p>
+    <button class="btn" id="bonusNext">К следующему столу</button>
   </div>
 </div>
 
@@ -370,8 +437,8 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- flow ---------- */
 let stage = 0;
-const KEY = 'timur-casino-stage';
-const loadStage = () => { try { return Math.min(4, +localStorage.getItem(KEY) || 0); } catch (e) { return 0; } };
+const KEY = 'timur-casino-stage-v2';
+const loadStage = () => { try { return Math.min(5, +localStorage.getItem(KEY) || 0); } catch (e) { return 0; } };
 const saveStage = () => { try { localStorage.setItem(KEY, String(stage)); } catch (e) {} };
 
 function go(n) {
@@ -385,8 +452,9 @@ function go(n) {
   window.scrollTo(0, 0);
   if (n === 1) { bjLosses = 0; bjNew(); }
   if (n === 2) slotInit();
-  if (n === 3) scratchInit();
-  if (n === 4) prizeShow();
+  if (n === 3) fightInit();
+  if (n === 4) scratchInit();
+  if (n === 5) prizeShow();
 }
 $('#startBtn').onclick = () => go(1);
 $('#restart').onclick = () => go(0);
@@ -564,6 +632,176 @@ async function showBonus() {
 }
 $('#bonusNext').onclick = () => { $('#bonusOverlay').hidden = true; go(3); };
 
+/* ---------- fight night ---------- */
+const LOANS = [
+  { lender: 'БыстроЗайм 24/7', amount: 500, back: 650, fine: 'Без справок и звонков маме. 0,99% в день, вернуть 650 €.' },
+  { lender: 'Займ под залог PlayStation', amount: 1000, back: 1400, fine: 'Приставку заберут, если что. Вернуть 1 400 €.' },
+  { lender: 'Займ у мамы', amount: 2000, back: 2000, fine: 'Без процентов, но с долгим разговором на кухне.' }
+];
+const FIGHTERS = [
+  { name: 'Гриша «Пельмень»', rec: '14-2-0 · тяж', odds: 1.65, trunks: '#d33c33', skin: '#e9b48e', hair: '#3a2416' },
+  { name: 'Валера «Коллектор»', rec: '9-4-1 · тяж', odds: 2.40, trunks: '#2f6fd6', skin: '#c48a60', hair: '#111111' }
+];
+let loans = 0, cash = 0, debt = 0, fights = 0, fightBusy = false;
+const eur = n => n.toLocaleString('ru-RU') + ' €';
+const fc = $('#fightCanvas'), fx = fc.getContext('2d');
+
+function fightInit() {
+  loans = 0; cash = 0; debt = 0; fights = 0; fightBusy = false;
+  document.querySelectorAll('.fighter').forEach((b, i) => {
+    const f = FIGHTERS[i];
+    b.querySelector('.fname').textContent = f.name;
+    b.querySelector('.rec').textContent = f.rec;
+    b.querySelector('.odds').textContent = 'кэф ' + f.odds.toFixed(2);
+    const c = b.querySelector('canvas'), x = c.getContext('2d');
+    x.clearRect(0, 0, 32, 32);
+    drawFighter(x, f, 15, 38, 1, "idle", 0);
+  });
+  loanView();
+}
+function wallet() { $('#cash').textContent = eur(cash); $('#debt').textContent = eur(debt); }
+function loanView() {
+  const L = LOANS[Math.min(loans, LOANS.length - 1)];
+  $('#lender').textContent = L.lender;
+  $('#loanAmount').textContent = eur(L.amount);
+  $('#loanFine').textContent = L.fine;
+  $('#loanBtn').textContent = loans ? 'Взять ещё микрозайм ' + eur(L.amount) : 'Взять микрозайм ' + eur(L.amount);
+  $('#fLoan').hidden = $('#loanBtn').hidden = false;
+  $('#fPick').hidden = $('#fFight').hidden = $('#fightNext').hidden = true;
+  $('#ticker').textContent = ''; $('#fightMsg').textContent = ''; $('#fightMsg').className = 'msg';
+  wallet();
+}
+$('#loanBtn').onclick = () => {
+  const L = LOANS[Math.min(loans, LOANS.length - 1)];
+  loans++; cash += L.amount; debt += L.back;
+  wallet();
+  $('#fLoan').hidden = $('#loanBtn').hidden = true;
+  $('#fPick').hidden = false;
+  $('#fightMsg').textContent = 'Одобрено за 3 секунды. Теперь всё на одного.';
+};
+document.querySelectorAll('.fighter').forEach(b => b.onclick = () => { if (!fightBusy) runFight(+b.dataset.f); });
+
+// пиксельный боец: x — центр стоп, y — пол, dir 1 смотрит вправо
+function drawFighter(g, f, x, y, dir, pose, bob) {
+  const r = (dx, dy, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(dir > 0 ? x + dx : x - dx - w), Math.round(y + dy), w, h); };
+  const glove = f.trunks;
+  if (pose === 'ko') {
+    r(-14, -4, 10, 3, f.skin); r(-4, -5, 6, 4, f.trunks); r(2, -5, 9, 4, f.skin);
+    r(11, -7, 6, 6, f.skin); r(11, -7, 2, 6, f.hair); r(4, -8, 3, 3, glove); r(6, -2, 3, 3, glove);
+    return;
+  }
+  const lean = pose === 'hit' ? -2 : pose === 'punch' ? 1 : 0;
+  const b = bob || 0;
+  r(-4, -12, 3, 12, f.skin); r(1, -12, 3, 12, f.skin);
+  r(-5, -1, 4, 1, '#1b1b1b'); r(1, -1, 4, 1, '#1b1b1b');
+  r(-4, -16, 8, 5, f.trunks); r(-4, -16, 8, 1, '#f6ecd8');
+  r(-4 + lean, -26 + b, 8, 10, f.skin);
+  r(-3 + lean * 1.5, -33 + b, 6, 7, f.skin); r(-3 + lean * 1.5, -34 + b, 6, 2, f.hair);
+  r(1 + lean * 1.5, -30 + b, 1, 1, '#111111');
+  if (pose === 'punch') {
+    r(3 + lean, -25 + b, 9, 2, f.skin); r(11 + lean, -27 + b, 4, 4, glove);
+    r(1 + lean, -29 + b, 3, 3, glove);
+  } else if (pose === 'hit') {
+    r(2 + lean, -22 + b, 3, 3, glove); r(-1 + lean, -21 + b, 3, 3, glove);
+  } else {
+    r(3 + lean, -24 + b, 2, 2, f.skin); r(4 + lean, -27 + b, 3, 3, glove); r(2 + lean, -30 + b, 3, 3, glove);
+  }
+}
+
+const crowd = Array.from({ length: 70 }, () => ({ x: rand(160), y: 14 + rand(26), c: ['#5a3a48', '#3d2a33', '#7a5560', '#2a1b22'][rand(4)] }));
+let scene = null;
+function drawScene(now) {
+  const g = fx;
+  g.fillStyle = '#140a0f'; g.fillRect(0, 0, 160, 100);
+  for (const p of crowd) { g.fillStyle = p.c; g.fillRect(p.x, p.y + (Math.sin(now / 200 + p.x) > .7 ? -1 : 0), 2, 3); }
+  g.fillStyle = '#c7ccd3'; g.fillRect(0, 62, 160, 38);
+  g.fillStyle = '#b3b9c2'; g.fillRect(0, 62, 160, 2);
+  g.fillStyle = '#d6dbe1'; g.fillRect(30, 70, 100, 1); g.fillRect(20, 96, 120, 1);
+  g.fillStyle = 'rgba(30,20,25,.55)';
+  for (let x = 4; x < 160; x += 8) g.fillRect(x, 40, 1, 24);
+  g.fillRect(0, 40, 160, 1); g.fillRect(0, 52, 160, 1);
+  if (!scene) return;
+  const s = scene, shake = s.shake > now ? (rand(3) - 1) : 0;
+  // бойцы рисуются в своих координатах и масштабируются под арену
+  g.save(); g.translate(80 + shake, 93); g.scale(1.7, 1.7);
+  const bobA = s.poses[0] === 'idle' ? (Math.sin(now / 160) > 0 ? 1 : 0) : 0;
+  const bobB = s.poses[1] === 'idle' ? (Math.sin(now / 160 + 1.5) > 0 ? 1 : 0) : 0;
+  drawFighter(g, FIGHTERS[0], s.x[0] - 80, 0, 1, s.poses[0], bobA);
+  drawFighter(g, FIGHTERS[1], s.x[1] - 80, 0, -1, s.poses[1], bobB);
+  if (s.spark && s.spark.until > now) { g.fillStyle = '#f3d58e'; const x = s.spark.x - 80, y = -27; g.fillRect(x - 1, y - 3, 2, 6); g.fillRect(x - 3, y - 1, 6, 2); }
+  g.restore();
+  // полоски здоровья
+  for (let i = 0; i < 2; i++) {
+    const bx = i ? 92 : 8;
+    g.fillStyle = '#000000'; g.fillRect(bx - 1, 3, 62, 6);
+    g.fillStyle = '#5a1a16'; g.fillRect(bx, 4, 60, 4);
+    g.fillStyle = s.hp[i] > 30 ? '#e6b450' : '#d33c33';
+    const w = Math.round(60 * s.hp[i] / 100);
+    g.fillRect(i ? bx + 60 - w : bx, 4, w, 4);
+  }
+  if (s.banner) {
+    g.fillStyle = 'rgba(0,0,0,.6)'; g.fillRect(0, 22, 160, 16);
+    g.fillStyle = '#f3d58e'; g.font = 'bold 11px monospace'; g.textAlign = 'center'; g.fillText(s.banner, 80, 34);
+  }
+  if (s.live) requestAnimationFrame(drawScene);
+}
+
+const LINES = ['{a} пробивает джеб', '{a} заходит с правой', '{a} кладёт лоукик', '{a} проводит апперкот', '{d} пропускает, но стоит', '{a} прижимает к сетке', 'Зал орёт: {a}!'];
+async function runFight(pick) {
+  fightBusy = true;
+  fights++;
+  const win = fights >= 2 || Math.random() < .45;   // со второго займа всегда заходит
+  const w = win ? pick : 1 - pick, l = 1 - w;
+  const stake = cash;
+  $('#fPick').hidden = true; $('#fFight').hidden = false;
+  $('#fightMsg').textContent = `Ставка: ${eur(stake)} на ${FIGHTERS[pick].name}`; $('#fightMsg').className = 'msg';
+  scene = { x: [70, 90], poses: ['idle', 'idle'], hp: [100, 100], live: true, banner: 'РАУНД 1', shake: 0 };
+  requestAnimationFrame(drawScene);
+  const T = reduce ? 0 : 1;
+  await wait(900 * T); scene.banner = '';
+  const hits = 9;
+  for (let k = 0; k < hits; k++) {
+    if (k === 5) { scene.banner = 'РАУНД 2'; await wait(800 * T); scene.banner = ''; }
+    const a = Math.random() < .62 ? w : l, d = 1 - a;
+    let dmg = 7 + rand(10);
+    if (d === l) dmg = Math.min(dmg, scene.hp[l] - 14); else dmg = Math.min(dmg, scene.hp[w] - 25);
+    if (dmg <= 0) continue;
+    scene.x[a] += a ? -4 : 4;
+    scene.poses[a] = 'punch'; scene.poses[d] = 'hit';
+    scene.hp[d] -= dmg;
+    scene.shake = performance.now() + 120;
+    scene.spark = { x: a ? scene.x[0] + 4 : scene.x[1] - 4, y: 64, until: performance.now() + 140 };
+    $('#ticker').textContent = LINES[rand(LINES.length)].replace('{a}', FIGHTERS[a].name).replace('{d}', FIGHTERS[d].name);
+    await wait(260 * T);
+    scene.x[a] += a ? 4 : -4;
+    scene.poses = ['idle', 'idle'];
+    await wait(420 * T);
+  }
+  // нокаут
+  scene.x[w] += w ? -5 : 5;
+  scene.poses[w] = 'punch'; scene.poses[l] = 'hit'; scene.hp[l] = 0;
+  scene.shake = performance.now() + 400;
+  scene.spark = { x: w ? scene.x[0] + 4 : scene.x[1] - 4, y: 64, until: performance.now() + 300 };
+  $('#ticker').textContent = FIGHTERS[w].name + ' выключает свет!';
+  await wait(450 * T);
+  scene.poses[l] = 'ko'; scene.poses[w] = 'idle'; scene.banner = 'KO!';
+  await wait(1100 * T);
+  scene.live = false;
+  const m = $('#fightMsg'), next = $('#fightNext');
+  next.hidden = false;
+  if (win) {
+    cash = Math.round(stake * FIGHTERS[pick].odds);
+    m.textContent = `${FIGHTERS[pick].name} победил! На счету ${eur(cash)}`; m.className = 'msg win';
+    next.textContent = 'Следующий стол'; next.onclick = () => go(4);
+  } else {
+    cash = 0;
+    m.textContent = `${FIGHTERS[pick].name} лёг. ${eur(stake)} ушли букмекеру`; m.className = 'msg lose';
+    next.textContent = 'Взять ещё микрозайм'; next.onclick = loanView;
+  }
+  wallet();
+  fightBusy = false;
+}
+
 /* ---------- scratch ---------- */
 const cv = $('#scratchCanvas'), ctx = cv.getContext('2d');
 let scratching = false, last = null, moves = 0, scratchDone = false;
@@ -623,7 +861,7 @@ function scratchWin() {
     $('#scratchNext').hidden = false;
   }, reduce ? 0 : 500);
 }
-$('#scratchNext').onclick = () => go(4);
+$('#scratchNext').onclick = () => go(5);
 
 /* ---------- prize ---------- */
 function prizeShow() {
